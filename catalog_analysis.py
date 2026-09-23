@@ -114,10 +114,66 @@ def duration_in_hours(minutes):
     return f"{hours}ч {mins}м"
 
 
+def rating_tier(rating):
+    if rating >= 9:
+        return "шедевр"
+    elif rating >= 7:
+        return "хорошо"
+    else:
+        return "средне" if rating >= 5 else "слабо"
+
+
+def decade_label(year):
+    match year:
+        case _ if year > 2020:
+            return "новые"
+        case _ if year >= 2015 and year <= 2020:
+            return "недавние"
+        case _:
+            return "старые"
+
+
+def not_comedy_movies(movies):
+    for movie in movies:
+        if "comedy" in movie["genres"]:
+            continue
+
+        print(movie["title"])
+
+
+def find_first_best(movies):
+    i = 0
+
+    while i < len(movies):
+        if movies[i]["rating"] > 9.0:
+            print(movies[i]["title"])
+            break
+
+        i += 1
+    else:
+        print("Шедевров не найдено")
+
+
+def count_long_movies(movies, threshold=120):
+    count = 0
+
+    for movie in movies:
+        if movie["duration_min"] > threshold:
+            count += 1
+
+    return count
+
+
 def main():
     print(average_rating(movies))
     print(catalog_age_stats(movies))
     print(duration_in_hours(385))
+    print(rating_tier(9.2))
+    print(decade_label(2015))
+    not_comedy_movies(movies)
+    find_first_best(movies)
+    find_first_best(movies[:7])
+    print(count_long_movies(movies))
 
 
 if __name__ == "__main__":
