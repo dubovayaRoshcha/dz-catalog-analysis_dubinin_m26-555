@@ -164,6 +164,55 @@ def count_long_movies(movies, threshold=120):
     return count
 
 
+def normalize_title(title):
+    words = title.split()
+    res = []
+
+    for word in words:
+        res.append(word[0].upper() + word[1:])
+
+    return " ".join(res)
+
+
+def make_slug(title):
+    return title.lower().replace(" ", "-")
+
+
+def format_report_line(movie):
+    title = normalize_title(movie["title"])
+    genres = ", ".join(sorted(movie["genres"]))
+    duration = duration_in_hours(movie["duration_min"])
+
+    return (f'"{title}" ({movie["year"]}) — {movie["rating"]}/10, '
+        f"{duration}, жанры: {genres}")
+
+
+def titles_sorted_by_rating(movies):
+    sort_movies = sorted(movies,
+        key=lambda movie: movie["rating"],
+        reverse=True)
+
+    titles = []
+
+    for movie in sort_movies:
+        titles.append(movie["title"])
+
+    return titles
+
+
+def top_n_by_rating(movies, n=3):
+    sort_movies = sorted(movies,
+        key=lambda movie: movie["rating"],
+        reverse=True)
+
+    res = []
+
+    for movie in sort_movies[:n]:
+        res.append((movie["title"], movie["rating"]))
+
+    return res
+
+
 def main():
     print(average_rating(movies))
     print(catalog_age_stats(movies))
@@ -174,6 +223,11 @@ def main():
     find_first_best(movies)
     find_first_best(movies[:7])
     print(count_long_movies(movies))
+    print(normalize_title("silent hours"))
+    print(make_slug("Silent Hours"))
+    print(format_report_line(movies[7]))
+    print(titles_sorted_by_rating(movies))
+    print(top_n_by_rating(movies))
 
 
 if __name__ == "__main__":
