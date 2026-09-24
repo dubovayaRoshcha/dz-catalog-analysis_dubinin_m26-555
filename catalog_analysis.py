@@ -244,6 +244,29 @@ def upper_average_ratings(movies):
             if movie["rating"] > average}
 
 
+def all_genres(movies):
+    genres = set()
+
+    for movie in movies:
+        genres.update(movie["genres"])
+
+    return genres
+
+
+def common_actors(movie1, movie2):
+    actors1 = set(movie1["actors"])
+    actors2 = set(movie2["actors"])
+
+    return actors1 & actors2
+
+
+def genres_only_in_one(movies_a, movies_b):
+    genres_a = all_genres(movies_a)
+    genres_b = all_genres(movies_b)
+
+    return genres_a - genres_b
+
+
 def main():
     print(average_rating(movies))
     print(catalog_age_stats(movies))
@@ -262,6 +285,9 @@ def main():
     print(count_by_genre(movies))
     print(actor_filmography(movies))
     print(upper_average_ratings(movies))
+    print(all_genres(movies))
+    print(common_actors(movies[0], movies[3]))
+    print(genres_only_in_one(movies[5:6], movies[:5]))
 
 
 if __name__ == "__main__":
